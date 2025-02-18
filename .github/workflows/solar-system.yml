@@ -1,47 +1,47 @@
-# name: Solar System Workflow
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
-#       - 'feature/*'
+name: Solar System Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'feature/*'
 
-# env:
-#     MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
-#     MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
-#     MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+env:
+    MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
+    MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
 
-# jobs:
-#     unit-testing:
-#         name: Unit Testing
-#         strategy:
-#             matrix:
-#                 nodejs_version: [18,19,20]
-#                 operating_system:[ubuntu-latest,macos-latest]
-#                 exclude:
-#                     - nodejs_version: 18
-#                       operating_system: macos-latest
-#         runs-on: ${{matrix.operating_system}}
+jobs:
+    unit-testing:
+        name: Unit Testing
+        strategy:
+            matrix:
+                nodejs_version: [18,19,20]
+                operating_system:[ubuntu-latest,macos-latest]
+                exclude:
+                    - nodejs_version: 18
+                      operating_system: macos-latest
+        runs-on: ${{matrix.operating_system}}
 
-#         # runs-on: ubuntu-latest
-#         steps:
-#         - name: Checkout Repositories
-#           uses: actions/checkout@v4
-#         - name: Setup NodeJS Version - ${{matrix.nodejs_version}}
-#           uses: actions/setup-node@v4
-#           with:
-#             node-version: 18
-#         - name: Install Dependencies
-#           run: npm ci
-#         #   run: npm install
-#         - name: Unit Testing
-#           run: npm test
+        # runs-on: ubuntu-latest
+        steps:
+        - name: Checkout Repositories
+          uses: actions/checkout@v4
+        - name: Setup NodeJS Version - ${{matrix.nodejs_version}}
+          uses: actions/setup-node@v4
+          with:
+            node-version: 18
+        - name: Install Dependencies
+          run: npm ci
+        #   run: npm install
+        - name: Unit Testing
+          run: npm test
 
-#         - name: Archive Test Results for v4
-#           uses: actions/upload-artifact@v4
-#           with:
-#             name: Mocha-Test-Result
-#             path: test-results.xml
+        - name: Archive Test Results for v4
+          uses: actions/upload-artifact@v4
+          with:
+            name: Mocha-Test-Result-${{matrix.nodejs_version}}
+            path: test-results.xml
 # name: CI - Unit Testing
 
 # on:
@@ -148,63 +148,63 @@
 #           path: test-results.xml
 
 
-name: Solar System Workflow
+# name: Solar System Workflow
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-      - 'feature/*'
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#       - 'feature/*'
 
-env:
-  MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
-  MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
-  MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+# env:
+#   MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+#   MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+#   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
-jobs:
-  unit-testing:
-    name: Unit Testing (Node.js ${{ matrix.nodejs_version }} on ${{ matrix.operating_system }})
-    strategy:
-      matrix:
-        nodejs_version: [18, 19, 20]
-        operating_system: [ubuntu-latest, macos-latest]
-        exclude:
-          - nodejs_version: 18
-            operating_system: macos-latest  # Excludes Node.js 18 on macOS
-    runs-on: ${{ matrix.operating_system }}
-    timeout-minutes: 30  # ⏳ Prevents long-running stuck jobs
+# jobs:
+#   unit-testing:
+#     name: Unit Testing (Node.js ${{ matrix.nodejs_version }} on ${{ matrix.operating_system }})
+#     strategy:
+#       matrix:
+#         nodejs_version: [18, 19, 20]
+#         operating_system: [ubuntu-latest, macos-latest]
+#         exclude:
+#           - nodejs_version: 18
+#             operating_system: macos-latest  # Excludes Node.js 18 on macOS
+#     runs-on: ${{ matrix.operating_system }}
+#     timeout-minutes: 30  # ⏳ Prevents long-running stuck jobs
 
-    concurrency:
-      group: unit-testing-${{ matrix.operating_system }}-${{ matrix.nodejs_version }}
-      cancel-in-progress: false  # 🚀 Prevents GitHub from auto-canceling in-progress jobs
+#     concurrency:
+#       group: unit-testing-${{ matrix.operating_system }}-${{ matrix.nodejs_version }}
+#       cancel-in-progress: false  # 🚀 Prevents GitHub from auto-canceling in-progress jobs
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v4
 
-      - name: Setup Node.js Version - ${{ matrix.nodejs_version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.nodejs_version }}
+#       - name: Setup Node.js Version - ${{ matrix.nodejs_version }}
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: ${{ matrix.nodejs_version }}
 
-      - name: Install Dependencies
-        run: npm ci  # ✅ Ensures a clean install
+#       - name: Install Dependencies
+#         run: npm ci  # ✅ Ensures a clean install
 
-      - name: Run Unit Tests
-        run: mocha app-test.js --timeout 30000 --reporter mocha-junit-reporter --exit
-        continue-on-error: false  # ✅ Ensures workflow fails if tests fail
+#       - name: Run Unit Tests
+#         run: mocha app-test.js --timeout 30000 --reporter mocha-junit-reporter --exit
+#         continue-on-error: false  # ✅ Ensures workflow fails if tests fail
 
-      - name: Check If Test Results Exist
-        run: |
-          if [ ! -f test-results.xml ]; then
-            echo "No test results found, skipping artifact upload."
-            exit 1
-          fi
+#       - name: Check If Test Results Exist
+#         run: |
+#           if [ ! -f test-results.xml ]; then
+#             echo "No test results found, skipping artifact upload."
+#             exit 1
+#           fi
 
-      - name: Archive Test Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: Mocha-Test-Result-${{ matrix.operating_system }}-node${{ matrix.nodejs_version }}-${{ github.run_id }}  # ✅ Unique artifact name
-          path: test-results.xml
+#       - name: Archive Test Results
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: Mocha-Test-Result-${{ matrix.operating_system }}-node${{ matrix.nodejs_version }}-${{ github.run_id }}  # ✅ Unique artifact name
+#           path: test-results.xml
 
