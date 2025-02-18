@@ -35,6 +35,7 @@ jobs:
           run: npm ci
         #   run: npm install
         - name: Unit Testing
+          id: nodejs-unit-testing-step
           run: npm test
 
         - name: Archive Test Results for v4
