@@ -25,7 +25,7 @@ jobs:
 
         # runs-on: ubuntu-latest
         steps:
-        - name: Checkout Repository
+        - name: Checkout Repositories
           uses: actions/checkout@v4
         - name: Setup NodeJS Version - ${{matrix.nodejs_version}}
           uses: actions/setup-node@v4
@@ -36,7 +36,7 @@ jobs:
         - name: Unit Testing
           run: npm test
 
-        - name: Archive Test Result 
+        - name: Archive Test Results for v4
           uses: actions/upload-artifact@v4
           with:
             name: Mocha-Test-Result
