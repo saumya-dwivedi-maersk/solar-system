@@ -108,6 +108,15 @@ jobs:
         #        ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
         #        ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
+        - name: Debug DockerHub Username and Image Tag
+          run: |
+           echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+           echo "Docker Image Tags: $DOCKERHUB_USERNAME/solar-system:latest, $DOCKERHUB_USERNAME/solar-system:$GITHUB_SHA"
+          env:
+           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+           GITHUB_SHA: ${{ github.sha }}
+
+
         - name: Docker Build For Testing
           uses: docker/build-push-action@v4
           with:
