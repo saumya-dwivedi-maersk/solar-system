@@ -131,10 +131,10 @@ jobs:
             tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
 
-        - name: Docker Tag For Testing
-          run: |
-              docker tag solar-system:e9c7ac8f7b6cf94e27d0523eeda0314bc9d0b817 saumyad123/solar-system:latest
-              docker tag solar-system:e9c7ac8f7b6cf94e27d0523eeda0314bc9d0b817 saumyad123/solar-system:test-tag
+        # - name: Docker Tag For Testing
+        #   run: |
+        #       docker tag solar-system:e9c7ac8f7b6cf94e27d0523eeda0314bc9d0b817 saumyad123/solar-system:latest
+        #       docker tag solar-system:e9c7ac8f7b6cf94e27d0523eeda0314bc9d0b817 saumyad123/solar-system:test-tag
     
     # has context menu
 
@@ -153,6 +153,13 @@ jobs:
 
             echo Testing Image URL using wget
             wget -q -O - 127.0.0.1:3000/live | grep live
+
+        - name: Docker Push For Testing
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            push: true
+            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
 
 
