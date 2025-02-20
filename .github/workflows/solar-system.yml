@@ -126,8 +126,8 @@ jobs:
 
 
 
-            - name: Docker Tag For Testing
-            run: |
+        - name: Docker Tag For Testing
+          run: |
               IMAGE_NAME=$(echo "${{ vars.DOCKERHUB_USERNAME }}/solar-system" | tr -d '\r')
               BRANCH_TAG=$(echo "${{ github.ref_name }}" | tr -d '\r')
               SHA_TAG=$(echo "${{ github.sha }}" | tr -d '\r')
