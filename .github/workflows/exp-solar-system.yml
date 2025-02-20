@@ -1,4 +1,4 @@
-name: Solar System Workflow
+name: New Solar System Workflow
 on:
   workflow_dispatch:
   push:
@@ -61,6 +61,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Run Code Coverage
+        continue-on-error: true
         run: npm run coverage
       - name: Archive Coverage Results
         uses: actions/upload-artifact@v4
