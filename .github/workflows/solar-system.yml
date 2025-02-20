@@ -126,16 +126,20 @@ jobs:
 
 
 
-        - name: Docker Tag For Testing
-        #   uses: docker/build-push-action@v4
-        #   with:
-        #      context: .
-        #      push: false
-          run: |
-            docker tag solar-system:${{github.sha}} ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
-            #  tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest,${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
-            docker tag solar-system:${{github.sha}} ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.ref_name }}
-
+            - name: Docker Tag For Testing
+            run: |
+              IMAGE_NAME=$(echo "${{ vars.DOCKERHUB_USERNAME }}/solar-system" | tr -d '\r')
+              BRANCH_TAG=$(echo "${{ github.ref_name }}" | tr -d '\r')
+              SHA_TAG=$(echo "${{ github.sha }}" | tr -d '\r')
+     
+              echo "Sanitized IMAGE_NAME: '$IMAGE_NAME'"
+              echo "Sanitized BRANCH_TAG: '$BRANCH_TAG'"
+              echo "Sanitized SHA_TAG: '$SHA_TAG'"
+     
+              docker tag solar-system:$SHA_TAG "$IMAGE_NAME:latest"
+              docker tag solar-system:$SHA_TAG "$IMAGE_NAME:$BRANCH_TAG"
+    
+    # has context menu
 
         - name: Docker Image Testing
           run: |
